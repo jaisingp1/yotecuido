@@ -1,0 +1,175 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Yo Te Cuido Color Palette - Light Mode */
+  --background: #FFFFFF; /* Blanco Puro */
+  --foreground: #003D7A; /* Azul Bandera - Texto Principal */
+  --card: #FFFFFF; /* Blanco Puro */
+  --card-foreground: #003D7A; /* Azul Bandera */
+  --popover: #FFFFFF; /* Blanco Puro */
+  --popover-foreground: #003D7A; /* Azul Bandera */
+  --primary: #003D7A; /* Azul Bandera - Identidad */
+  --primary-foreground: #FFFFFF; /* Blanco Puro */
+  --secondary: #F5F5F5; /* Gris Claro */
+  --secondary-foreground: #333333; /* Gris Oscuro */
+  --muted: #F5F5F5; /* Gris Claro */
+  --muted-foreground: #666666; /* Gris Medio */
+  --accent: #66B2FF; /* Azul Cielo */
+  --accent-foreground: #003D7A; /* Azul Bandera */
+  --destructive: #D41C3A; /* Rojo Bandera */
+  --destructive-foreground: #FFFFFF; /* Blanco Puro */
+  --border: #E5E5E5; /* Gris más claro */
+  --input: #F5F5F5; /* Gris Claro */
+  --ring: #003D7A; /* Azul Bandera */
+  --chart-1: #D41C3A; /* Rojo Bandera */
+  --chart-2: #4CAF50; /* Verde Cuidado */
+  --chart-3: #FF9800; /* Naranja Cálido */
+  --chart-4: #66B2FF; /* Azul Cielo */
+  --chart-5: #003D7A; /* Azul Bandera */
+  --radius: 0.625rem;
+  --sidebar: #F5F5F5; /* Gris Claro */
+  --sidebar-foreground: #333333; /* Gris Oscuro */
+  --sidebar-primary: #003D7A; /* Azul Bandera */
+  --sidebar-primary-foreground: #FFFFFF; /* Blanco Puro */
+  --sidebar-accent: #E5E5E5; /* Gris más claro */
+  --sidebar-accent-foreground: #333333; /* Gris Oscuro */
+  --sidebar-border: #E5E5E5; /* Gris más claro */
+  --sidebar-ring: #003D7A; /* Azul Bandera */
+
+  /* Custom colors for service categories using Yo Te Cuido palette */
+  --children-color: #FF9800; /* Naranja Cálido - para niños */
+  --children-bg: #FFF3E0; /* Naranja muy claro */
+  --pets-color: #4CAF50; /* Verde Cuidado - para mascotas */
+  --pets-bg: #E8F5E8; /* Verde muy claro */
+  --elderly-color: #66B2FF; /* Azul Cielo - para adultos mayores */
+  --elderly-bg: #E6F3FF; /* Azul muy claro */
+}
+
+.dark {
+  /* Yo Te Cuido Color Palette - Dark Mode */
+  --background: #1A1A1A; /* Fondo oscuro suave */
+  --foreground: #66B2FF; /* Azul Cielo - texto principal en dark */
+  --card: #2D2D2D; /* Gris oscuro para tarjetas */
+  --card-foreground: #FFFFFF; /* Blanco Puro */
+  --popover: #2D2D2D; /* Gris oscuro */
+  --popover-foreground: #FFFFFF; /* Blanco Puro */
+  --primary: #66B2FF; /* Azul Cielo - más visible en dark */
+  --primary-foreground: #1A1A1A; /* Fondo oscuro */
+  --secondary: #404040; /* Gris medio */
+  --secondary-foreground: #FFFFFF; /* Blanco Puro */
+  --muted: #404040; /* Gris medio */
+  --muted-foreground: #CCCCCC; /* Gris claro */
+  --accent: #FF9800; /* Naranja Cálido - acento en dark */
+  --accent-foreground: #1A1A1A; /* Fondo oscuro */
+  --destructive: #D41C3A; /* Rojo Bandera */
+  --destructive-foreground: #FFFFFF; /* Blanco Puro */
+  --border: #404040; /* Gris medio */
+  --input: #404040; /* Gris medio */
+  --ring: #66B2FF; /* Azul Cielo */
+  --chart-1: #D41C3A; /* Rojo Bandera */
+  --chart-2: #4CAF50; /* Verde Cuidado */
+  --chart-3: #FF9800; /* Naranja Cálido */
+  --chart-4: #66B2FF; /* Azul Cielo */
+  --chart-5: #003D7A; /* Azul Bandera */
+  --sidebar: #2D2D2D; /* Gris oscuro */
+  --sidebar-foreground: #FFFFFF; /* Blanco Puro */
+  --sidebar-primary: #66B2FF; /* Azul Cielo */
+  --sidebar-primary-foreground: #1A1A1A; /* Fondo oscuro */
+  --sidebar-accent: #404040; /* Gris medio */
+  --sidebar-accent-foreground: #FFFFFF; /* Blanco Puro */
+  --sidebar-border: #404040; /* Gris medio */
+  --sidebar-ring: #66B2FF; /* Azul Cielo */
+
+  /* Dark mode service category colors */
+  --children-color: #FFB74D; /* Naranja más brillante */
+  --children-bg: #3E2723; /* Marrón oscuro */
+  --pets-color: #66BB6A; /* Verde más brillante */
+  --pets-bg: #1B5E20; /* Verde oscuro */
+  --elderly-color: #90CAF9; /* Azul más brillante */
+  --elderly-bg: #1565C0; /* Azul oscuro */
+}
+
+@theme inline {
+  /* Added font variables */
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-heading);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Custom utility classes for service categories */
+  --color-children: var(--children-color);
+  --color-children-bg: var(--children-bg);
+  --color-pets: var(--pets-color);
+  --color-pets-bg: var(--pets-bg);
+  --color-elderly: var(--elderly-color);
+  --color-elderly-bg: var(--elderly-bg);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom utility classes for service categories */
+@layer utilities {
+  .text-children {
+    color: var(--children-color);
+  }
+  .bg-children {
+    background-color: var(--children-bg);
+  }
+  .text-pets {
+    color: var(--pets-color);
+  }
+  .bg-pets {
+    background-color: var(--pets-bg);
+  }
+  .text-elderly {
+    color: var(--elderly-color);
+  }
+  .bg-elderly {
+    background-color: var(--elderly-bg);
+  }
+}
