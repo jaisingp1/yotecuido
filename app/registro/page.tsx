@@ -75,9 +75,7 @@ export default function RegisterPage() {
       <header className="border-b bg-background/95 backdrop-blur">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-              <Heart className="h-5 w-5 text-white" fill="white" />
-            </div>
+            <img src="/yotecuido_logo.svg" alt="YoTeCuido.cl Logo" className="h-10 w-auto" />
             <span className="text-xl font-bold text-foreground">YoTeCuido.cl</span>
           </Link>
 

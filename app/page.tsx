@@ -12,9 +12,7 @@ export default function HomePage() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-              <Heart className="h-5 w-5 text-primary-foreground" fill="currentColor" />
-            </div>
+            <img src="/yotecuido_logo.svg" alt="YoTeCuido.cl Logo" className="h-10 w-auto" />
             <span className="text-xl font-bold text-foreground">YoTeCuido.cl</span>
           </Link>
 
