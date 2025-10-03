@@ -4,19 +4,20 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 import { useRouter } from "next/navigation"
 
 interface User {
-  id: string
+  user_id: string
   name: string
   email: string
   phone: string
   location: string
-  role: "client" | "caregiver" | "both"
+  user_type: "client" | "caregiver"
   avatar?: string
-  verified: boolean
-  memberSince: string
+  is_verified: boolean
+  created_at: string
 }
 
 interface AuthContextType {
   user: User | null
+  token: string | null
   login: (email: string, password: string) => Promise<boolean>
   register: (data: any) => Promise<boolean>
   logout: () => void
@@ -25,112 +26,101 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-// Mock users database
-const MOCK_USERS: Record<string, User & { password: string }> = {
-  "carolina.perez@email.com": {
-    id: "1",
-    name: "Carolina Pérez",
-    email: "carolina.perez@email.com",
-    password: "demo123",
-    phone: "+56 9 1234 5678",
-    location: "Providencia, Santiago",
-    role: "client",
-    avatar: "/placeholder.svg?key=user1",
-    verified: true,
-    memberSince: "Marzo 2024",
-  },
-  "maria.gonzalez@email.com": {
-    id: "2",
-    name: "María González",
-    email: "maria.gonzalez@email.com",
-    password: "demo123",
-    phone: "+56 9 8765 4321",
-    location: "Las Condes, Santiago",
-    role: "caregiver",
-    avatar: "/woman-caregiver.png",
-    verified: true,
-    memberSince: "Enero 2024",
-  },
-  "usuario.dual@email.com": {
-    id: "3",
-    name: "Roberto Fernández",
-    email: "usuario.dual@email.com",
-    password: "demo123",
-    phone: "+56 9 5555 5555",
-    location: "Ñuñoa, Santiago",
-    role: "both",
-    avatar: "/man-with-pets.png",
-    verified: true,
-    memberSince: "Febrero 2024",
-  },
-}
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  const [token, setToken] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
 
-  // Load user from localStorage on mount
+  // Load user and token from localStorage on mount
   useEffect(() => {
-    const storedUser = localStorage.getItem("yotecuido_user")
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
+    try {
+      const storedUser = localStorage.getItem("yotecuido_user")
+      const storedToken = localStorage.getItem("yotecuido_token")
+      if (storedUser && storedToken) {
+        setUser(JSON.parse(storedUser))
+        setToken(storedToken)
+      }
+    } catch (error) {
+      console.error("Failed to parse user data from localStorage", error)
+      // Clear corrupted data
+      localStorage.removeItem("yotecuido_user")
+      localStorage.removeItem("yotecuido_token")
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }, [])
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 500))
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      })
 
-    const mockUser = MOCK_USERS[email.toLowerCase()]
-    if (mockUser && mockUser.password === password) {
-      const { password: _, ...userWithoutPassword } = mockUser
-      setUser(userWithoutPassword)
-      localStorage.setItem("yotecuido_user", JSON.stringify(userWithoutPassword))
+      if (!response.ok) {
+        // Optionally, you could parse the error message from the response
+        return false
+      }
+
+      const data = await response.json()
+      const { token: newToken, user: userData } = data
+
+      setUser(userData)
+      setToken(newToken)
+      localStorage.setItem("yotecuido_user", JSON.stringify(userData))
+      localStorage.setItem("yotecuido_token", newToken)
+
       return true
+    } catch (error) {
+      console.error("Login failed:", error)
+      return false
     }
-    return false
   }
 
   const register = async (data: any): Promise<boolean> => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 500))
+    try {
+      const response = await fetch("/api/registro", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      })
 
-    const newUser: User = {
-      id: Date.now().toString(),
-      name: data.name,
-      email: data.email,
-      phone: data.phone,
-      location: data.location,
-      role: data.userType,
-      verified: false,
-      memberSince: new Date().toLocaleDateString("es-CL", { month: "long", year: "numeric" }),
+      if (!response.ok) {
+        return false
+      }
+
+      // After successful registration, automatically log the user in
+      return await login(data.email, data.password)
+    } catch (error) {
+      console.error("Registration failed:", error)
+      return false
     }
-
-    setUser(newUser)
-    localStorage.setItem("yotecuido_user", JSON.stringify(newUser))
-    return true
   }
 
   const logout = () => {
     setUser(null)
+    setToken(null)
     localStorage.removeItem("yotecuido_user")
+    localStorage.removeItem("yotecuido_token")
     router.push("/")
   }
 
+  // Prevent rendering children until the auth state is determined
   if (isLoading) {
-    return null // Or a loading spinner
+    return null
   }
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        token,
         login,
         register,
         logout,
-        isAuthenticated: !!user,
+        isAuthenticated: !!user && !!token,
       }}
     >
       {children}
